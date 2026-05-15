@@ -1,0 +1,19 @@
+environment:
+  base_url: "http://144.31.139.115:5000/"
+  browser: "chromium"
+  headless: true
+  timeout: 30000
+search:
+  default_article_name: "city"
+  default_filter_type: "relevance"
+  default_results_count: 5
+selectors:
+  home:
+    search_input: "input[data-testid='search-input']"
+    search_button: "button[data-testid='search-button']"
+  results:
+    filter_dropdown: "select[data-testid='filter-sort']"
+    results_loader: "div[data-testid='results-loader']"
+    results_container: "div[data-testid='search-results-grid']"
+    article_cards: "article[data-testid^='search-result-card']"
+    price_element: "div[data-testid^='search-result-price']"
