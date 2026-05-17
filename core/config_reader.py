@@ -5,6 +5,8 @@ import yaml
 
 
 class ConfigReader:
+    DEFAULT_CONFIG_PATH = Path(__file__).parent.parent / "config" / "config.yaml"
+
     _instance = None
 
     def __new__(cls, config_path: str | Path | None = None):
@@ -14,15 +16,12 @@ class ConfigReader:
         return cls._instance
 
     def _load(self, config_path: str | Path | None = None):
-        if config_path is None:
-            path: Path = Path(__file__).parent.parent / "config" / "config.yaml"
-        else:
-            path: Path = Path(config_path)
+        path = Path(config_path) if config_path is not None else self.DEFAULT_CONFIG_PATH
 
         if not path.exists():
-            raise FileNotFoundError(f"Конфиг не найден: {path}")
+            raise FileNotFoundError(f"Конфиг не найден: {path.absolute()}")
 
-        with open(path, "r", encoding="utf-8") as f:
+        with path.open("r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
             self._config = data if isinstance(data, dict) else {}
 
@@ -39,10 +38,4 @@ class ConfigReader:
     def environment(self) -> dict:
         return self._config.get("environment", {})
 
-    @property
-    def search(self) -> dict:
-        return self._config.get("search", {})
 
-    @property
-    def selectors(self) -> dict:
-        return self._config.get("selectors", {})
