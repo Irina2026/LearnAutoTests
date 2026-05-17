@@ -1,19 +1,19 @@
-
 import pytest
 from playwright.sync_api import Page
+
+from core.sorting_filters import FilterType
 from pages.home_page import HomePage
-from pages.search_results_page import SearchResultsPage
+from utils.sorting import is_sorted_ascending, is_sorted_descending
 
-# 📦 Таблица ваших данных → список кортежей
-SEARCH_SCENARIOS = [
-    ("city", 10, "price_asc"),  # Price: low to high
-    ("city", 15, "price_desc"),  # Price: high to low
-    ("habits", 10, "price_asc"),
-    ("habits", 15, "price_desc"),
-]
+SEARCH_NAMES = ["city", "habits"]
+SEARCH_COUNTS = [10, 15]
+
+FILTER_VALUES = [FilterType.ASC, FilterType.DESC]
 
 
-@pytest.mark.parametrize("name, count, filter_value", SEARCH_SCENARIOS)
+@pytest.mark.parametrize("filter_value", FILTER_VALUES)
+@pytest.mark.parametrize("count", SEARCH_COUNTS)
+@pytest.mark.parametrize("name", SEARCH_NAMES)
 def test_search_with_custom_data(
         page: Page,
         base_url: str,
@@ -21,24 +21,22 @@ def test_search_with_custom_data(
         count: int,
         filter_value: str
 ):
-    # 1. Открываем главную
     page.goto(base_url)
 
-    # 2. Ищем статью по переданному `name`
     home = HomePage(page)
-    results_page = home.search(name)  # ваш метод уже умеет принимать article_name
+    results_page = home.search(name)
 
-    # 3. Применяем фильтр (внутреннее значение value из <option>)
     results_page.apply_filter(filter_value)
 
-    # 4. Получаем первые `count` цен
     prices = results_page.get_prices(count)
 
-    # ✅ Проверка 1: вернулось ровно столько цен, сколько просили
     assert len(prices) == count, f"Ожидалось {count} цен, получено {len(prices)}"
 
-    # ✅ Проверка 2: порядок соответствует фильтру
-    if filter_value == "price_asc":
-        assert results_page.is_sorted_ascending(prices), "Цены не отсортированы по возрастанию!"
-    elif filter_value == "price_desc":
-        assert results_page.is_sorted_descending(prices), "Цены не отсортированы по убыванию!"
+    if filter_value == FilterType.ASC:
+        assert is_sorted_ascending(prices), (
+            f"Цены не отсортированы по возрастанию! Ожидалось {sorted(prices)}, получено: {prices}"
+        )
+    elif filter_value == FilterType.DESC:
+        assert is_sorted_descending(prices), (
+            f"Цены не отсортированы по убыванию! Ожидалось: {sorted(prices, reverse=True)}, получено: {prices}"
+        )
