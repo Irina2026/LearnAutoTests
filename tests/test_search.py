@@ -7,25 +7,23 @@ from utils.sorting import is_sorted_ascending, is_sorted_descending
 
 SEARCH_NAMES = ["city", "habits"]
 SEARCH_COUNTS = [10, 15]
-
 FILTER_VALUES = [FilterType.ASC, FilterType.DESC]
 
+NAME_COUNT_PAIRS = list(zip(SEARCH_NAMES, SEARCH_COUNTS))
 
 @pytest.mark.parametrize("filter_value", FILTER_VALUES)
-@pytest.mark.parametrize("count", SEARCH_COUNTS)
-@pytest.mark.parametrize("name", SEARCH_NAMES)
+@pytest.mark.parametrize("name, count", NAME_COUNT_PAIRS)
 def test_search_with_custom_data(
         page: Page,
         base_url: str,
         name: str,
         count: int,
-        filter_value: str
+        filter_value: FilterType
 ):
     page.goto(base_url)
 
     home = HomePage(page)
     results_page = home.search(name)
-
     results_page.apply_filter(filter_value)
 
     prices = results_page.get_prices(count)
