@@ -19,7 +19,7 @@ class SearchResultsPage(BasePage):
         self._results_loader.wait_for(state="visible")
         self._results_loader.wait_for(state="hidden")
         self._results_container.wait_for(state="visible")
-        self.page.wait_for_load_state(state="domcontentloaded")
+
 
     def get_prices(self, count: int):
         self._price_element.first.wait_for(state="attached")
