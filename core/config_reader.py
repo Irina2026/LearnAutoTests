@@ -5,7 +5,7 @@ import yaml
 
 
 class ConfigReader:
-    DEFAULT_CONFIG_PATH = Path(__file__).parent.parent / "config" / "config.yaml"
+    DEFAULT_CONFIG_PATH = Path("config/config.yaml")
 
     _instance = None
 
