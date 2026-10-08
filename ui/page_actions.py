@@ -1,12 +1,17 @@
 import logging
-from logger import LOGGER_NAME
+
 from playwright.sync_api import Page, Dialog
+
+from logger import LOGGER_NAME
+
 logger = logging.getLogger(LOGGER_NAME)
 from collections.abc import Callable
 
 """
 Класс действий со страницей
 """
+
+
 class PageActions:
     def __init__(self, page: Page) -> None:
         self.page = page
@@ -40,12 +45,13 @@ class PageActions:
     --- Специально диалог не ждет, просто выполняет action, если внутри прошло событие - обрабатывается
     --- Может быть ограничено дефолтным таймаутом action, либо установленным в конфиге
     """
+
     def _handle_dialog(
             self,
-            action: Callable[[], None], # действие(функция или вызываемый объект, не принимает аргументов,
-                                        # ничего не возвращает)
-            mode: str, # режим "accept" - ок, "dismiss" - отмена
-            prompt_text: str | None = None, # необязательный ввод
+            action: Callable[[], None],  # действие(функция или вызываемый объект, не принимает аргументов,
+            # ничего не возвращает)
+            mode: str,  # режим "accept" - ок, "dismiss" - отмена
+            prompt_text: str | None = None,  # необязательный ввод
     ) -> str:
         logger.info("PageActions: expect dialog")
         message = ""  # сюда сохраняется текст диалога
@@ -64,8 +70,8 @@ class PageActions:
 
             dialog.accept(prompt_text)
 
-        self.page.once("dialog", handle_dialog) # подписаться один раз и закрыть, on - навсегда до закрытия
-                                                        # страницы, предотвращает случайную обработку следующих диалогов
+        self.page.once("dialog", handle_dialog)  # подписаться один раз и закрыть, on - навсегда до закрытия
+        # страницы, предотвращает случайную обработку следующих диалогов
         """
         Триггер: выполнение функции, вызывающей диалог
         """
@@ -91,4 +97,3 @@ class PageActions:
     ) -> str:
         logger.info("PageActions: accept prompt")
         return self._handle_dialog(action, mode="accept", prompt_text=prompt_text)
-

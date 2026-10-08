@@ -26,9 +26,9 @@ class MultiWebElement:
             raise StopIteration
 
         element = WebElement(page=self.page,
-            locator=self.locator.nth(self.index),
-            description=f"{self.description}[{self.index}]",
-        )
+                             locator=self.locator.nth(self.index),
+                             description=f"{self.description}[{self.index}]",
+                             )
 
         self.index += 1
         return element

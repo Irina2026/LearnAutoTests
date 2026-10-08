@@ -1,20 +1,31 @@
 import random
 
-from playwright.sync_api import Page
 import pytest
+from playwright.sync_api import Page
+
 from pages.slider_page import SliderPage
+
+"""
+в headed-режиме тест зелёный, а в headless красный — это Chromium-специфика, запускать отдельно или 
+узнать, как обходить эту особенность
+"""
 
 
 def test_slider_page(managed_page: Page):
-    count = random.randint(1, 9)
+    managed_page.goto("/horizontal_slider")
     slider_page = SliderPage(managed_page)
-    slider_page.open()
 
-    actual_text = slider_page.focus_slider_and_use_arrow_key("ArrowRight", count)
+    min_value = slider_page.get_min()
+    max_value = slider_page.get_max()
+    step = slider_page.get_step()
+
+    max_steps = int(round((max_value - min_value) / step))
+    count = random.randint(1, max_steps)
+    target_value = min_value + count * step
+
+    actual_text = slider_page.set_value(target_value)
     actual_value = float(actual_text)
 
-    expected_value = count * slider_page.get_step()
-
-    assert actual_value == pytest.approx(expected_value), (
-        f"count={count}, отображается '{actual_text}'"
+    assert actual_value == pytest.approx(target_value), (
+        f"Ожидалось: '{target_value}', получено: '{actual_text}'"
     )

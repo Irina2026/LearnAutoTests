@@ -5,8 +5,8 @@
     "height": 1080
   },
   "ignore_https_errors": true,
-  "default_timeout_ms": 10000,
-  "navigation_timeout_ms": 15000,
+  "default_timeout_ms": 30000,
+  "navigation_timeout_ms": 60000,
   "enable_tracing": true,
   "block_analytics": true,
   "blocked_domains": [

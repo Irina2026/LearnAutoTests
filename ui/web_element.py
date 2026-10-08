@@ -1,14 +1,18 @@
 import logging
-from logger import LOGGER_NAME
+
 from playwright.sync_api import Page, Locator
+
+from logger import LOGGER_NAME
+
 logger = logging.getLogger(LOGGER_NAME)
 
 """
 Класс действий с элементом
 """
+
+
 class WebElement:
     def __init__(self, page: Page, locator: Locator, description: str) -> None:
-
         self.page = page
         self.locator = locator
         self.description = description
@@ -49,3 +53,17 @@ class WebElement:
         result = self.locator.get_attribute(attribute)
         logger.info(f"{self}: attribute '{attribute}' = '{result}'")
         return result
+
+    def fill(self, value: str) -> None:
+        logger.info(f"{self}: fill '{value}'")
+        self.locator.fill(value)
+
+    def input_value(self) -> str:
+        logger.info(f"{self}: get input value")
+        result = self.locator.input_value()
+        logger.info(f"{self}: input value = '{result}'")
+        return result
+
+    def hover(self) -> None:
+        logger.info(f"{self}: hover")
+        self.locator.hover()

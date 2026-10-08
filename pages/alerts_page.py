@@ -5,15 +5,12 @@ from ui import WebElement
 
 
 class AlertsPage(BasePage):
-    PATH = "/javascript_alerts"
-
     def __init__(self, page: Page) -> None:
         super().__init__(page)
         self.js_alert_button = WebElement(page=page,
                                           locator=self.page.get_by_role("button", name="Click for JS Alert"),
                                           description="Click for JS Alert",
                                           )
-
 
         self.js_confirm_button = WebElement(page=page,
                                             locator=self.page.get_by_role("button", name="Click for JS Confirm"),
@@ -30,13 +27,12 @@ class AlertsPage(BasePage):
                                  description="Result text",
                                  )
 
-
     def check_text_alert_button(self) -> str:
         return self.page_actions.run_and_accept_alert(self.js_alert_button.click)
 
     def check_result_alert_button(self) -> str:
-         self.page_actions.run_and_accept_alert(self.js_alert_button.click)
-         return self.result.get_inner_text()
+        self.page_actions.run_and_accept_alert(self.js_alert_button.click)
+        return self.result.get_inner_text()
 
     def check_text_confirm_button(self) -> str:
         return self.page_actions.run_and_accept_alert(self.js_confirm_button.click)

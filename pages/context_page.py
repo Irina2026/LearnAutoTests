@@ -5,8 +5,6 @@ from ui import WebElement
 
 
 class ContextPage(BasePage):
-    PATH = "/context_menu"
-
     def __init__(self, page: Page) -> None:
         super().__init__(page)
 
