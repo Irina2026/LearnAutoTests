@@ -1,0 +1,11 @@
+from playwright.sync_api import Page
+
+from ui import PageActions
+
+
+class BasePage:
+    """Базовый класс для всех страниц проекта."""
+
+    def __init__(self, page: Page) -> None:
+        self.page = page
+        self.page_actions = PageActions(page=page)
