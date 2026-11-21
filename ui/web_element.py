@@ -67,3 +67,11 @@ class WebElement:
     def hover(self) -> None:
         logger.info(f"{self}: hover")
         self.locator.hover()
+
+    def scroll_into_view(self) -> None:
+        logger.info(f"{self}: scroll into view")
+        self.locator.scroll_into_view_if_needed()
+
+    def set_input_files(self, path: str) -> None:
+        logger.info(f"{self}: set input files '{path}'")
+        self.locator.set_input_files(path)

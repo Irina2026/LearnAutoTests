@@ -97,3 +97,8 @@ class PageActions:
     ) -> str:
         logger.info("PageActions: accept prompt")
         return self._handle_dialog(action, mode="accept", prompt_text=prompt_text)
+
+    def reload(self) -> None:
+        logger.info("PageActions: reload")
+        self.page.reload()
+        self.page.wait_for_load_state("networkidle")
